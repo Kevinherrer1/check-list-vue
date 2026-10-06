@@ -149,12 +149,6 @@ async function patchCheck(check, payload) {
   }
 }
 
-function toggleMount(check, path) {
-  const details = { ...(check.mounts_details || {}) }
-  details[path] = !details[path]
-  patchCheck(check, { mounts_details: details })
-}
-
 function askSshCredentials(check) {
   return new Promise((resolve) => {
     sshModal.value = { open: true, check, resolve }
@@ -448,28 +442,28 @@ watch(() => route.query.fecha, (value) => {
         <div class="checks">
           <div class="check-box">
             <label>Servidor prendido</label>
-            <div class="seg">
-              <button type="button" :class="{ 'on-ok': check.powered_on === 'prendido' }" @click="patchCheck(check, { powered_on: 'prendido' })">Prendido</button>
-              <button type="button" :class="{ 'on-bad': check.powered_on === 'apagado' }" @click="patchCheck(check, { powered_on: 'apagado' })">Apagado</button>
-              <button type="button" :class="{ 'on-warn': check.powered_on === 'pending' }" @click="patchCheck(check, { powered_on: 'pending' })">Pendiente</button>
+            <div class="seg" title="Lo determina Ping / SSH; no se cambia a mano">
+              <span :class="{ 'on-ok': check.powered_on === 'prendido' }">Prendido</span>
+              <span :class="{ 'on-bad': check.powered_on === 'apagado' }">Apagado</span>
+              <span :class="{ 'on-warn': check.powered_on === 'pending' }">Pendiente</span>
             </div>
           </div>
           <div class="check-box">
             <label>Montajes NetApp</label>
-            <div class="seg">
-              <button type="button" :class="{ 'on-ok': check.mounts_status === 'ok' }" @click="patchCheck(check, { mounts_status: 'ok' })">Montados</button>
-              <button type="button" :class="{ 'on-bad': check.mounts_status === 'falla' }" @click="patchCheck(check, { mounts_status: 'falla' })">Falla</button>
-              <button type="button" :class="{ 'on-na': check.mounts_status === 'na' }" @click="patchCheck(check, { mounts_status: 'na' })">N/A</button>
-              <button type="button" :class="{ 'on-warn': check.mounts_status === 'pending' }" @click="patchCheck(check, { mounts_status: 'pending' })">Pendiente</button>
+            <div class="seg" title="Lo determina la revisión SSH; no se cambia a mano">
+              <span :class="{ 'on-ok': check.mounts_status === 'ok' }">Montados</span>
+              <span :class="{ 'on-bad': check.mounts_status === 'falla' }">Falla</span>
+              <span :class="{ 'on-na': check.mounts_status === 'na' }">N/A</span>
+              <span :class="{ 'on-warn': check.mounts_status === 'pending' }">Pendiente</span>
             </div>
           </div>
           <div class="check-box">
             <label>Respaldo</label>
-            <div class="seg">
-              <button type="button" :class="{ 'on-ok': check.backup === 'exitoso' }" @click="patchCheck(check, { backup: 'exitoso' })">Exitoso</button>
-              <button type="button" :class="{ 'on-bad': check.backup === 'fallido' }" @click="patchCheck(check, { backup: 'fallido' })">Fallido</button>
-              <button type="button" :class="{ 'on-na': check.backup === 'na' }" @click="patchCheck(check, { backup: 'na' })">No aplica</button>
-              <button type="button" :class="{ 'on-warn': check.backup === 'pending' }" @click="patchCheck(check, { backup: 'pending' })">Pendiente</button>
+            <div class="seg" title="Lo determina la revisión SSH; no se cambia a mano">
+              <span :class="{ 'on-ok': check.backup === 'exitoso' }">Exitoso</span>
+              <span :class="{ 'on-bad': check.backup === 'fallido' }">Fallido</span>
+              <span :class="{ 'on-na': check.backup === 'na' }">No aplica</span>
+              <span :class="{ 'on-warn': check.backup === 'pending' }">Pendiente</span>
             </div>
           </div>
         </div>
@@ -480,7 +474,6 @@ watch(() => route.query.fecha, (value) => {
             :key="mount.id"
             class="mount"
             :class="{ on: check.mounts_details?.[mount.path] }"
-            @click="toggleMount(check, mount.path)"
           >{{ mount.path }}</span>
         </div>
 

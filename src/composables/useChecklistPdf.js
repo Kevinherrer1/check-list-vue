@@ -75,15 +75,9 @@ export function estadoGeneral(check) {
   return 'parcial'
 }
 
-export function notaPrint(check, max = 72) {
+export function notaPrint(check, max = 400) {
   const causa = String(check.root_cause || '').trim()
-  const obs = String(check.observations || '').trim()
-  let auto = String(check.review_result || '').trim()
+  const auto = String(check.review_result || '').trim().replace(/\s+/g, ' ')
   const recortar = (s) => (s.length <= max ? s : `${s.slice(0, max - 1)}…`)
-  if (causa) return recortar(causa)
-  if (obs) return recortar(obs)
-  if (!auto) return ''
-  auto = auto.replace(/\s+/g, ' ')
-  const m = auto.match(/^(.{1,80}→\s*\S+)/u)
-  return recortar(m ? m[1] : auto)
+  return recortar(causa || auto)
 }

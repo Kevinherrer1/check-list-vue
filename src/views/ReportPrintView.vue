@@ -112,24 +112,26 @@ watch(fecha, load)
           <col class="c-tam">
           <col class="c-est">
           <col class="c-nota">
+          <col class="c-obs">
         </colgroup>
         <thead>
           <tr>
             <th>Servidor</th>
             <th>IP</th>
-            <th>On</th>
-            <th>Mont.</th>
-            <th>Resp.</th>
+            <th>Prendido</th>
+            <th>Montado</th>
+            <th>Respaldo</th>
             <th>Hora</th>
-            <th>Tam.</th>
-            <th>Est.</th>
+            <th>Tamaño</th>
+            <th>Estado</th>
             <th>Resumen</th>
+            <th>Observación</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="check in checks" :key="check.id" :class="'st-' + estadoGeneral(check)">
             <td>{{ check.server?.name }}</td>
-            <td class="mono">{{ check.server?.ip || check.server?.hostname }}</td>
+            <td class="mono c-ip-td">{{ check.server?.ip || check.server?.hostname }}</td>
             <td class="center">{{ cortoValor(check.powered_on) }}</td>
             <td class="center">{{ cortoValor(check.mounts_status) }}</td>
             <td class="center">{{ cortoValor(check.backup) }}</td>
@@ -137,9 +139,10 @@ watch(fecha, load)
             <td class="mono">{{ check.size }}</td>
             <td class="center"><strong>{{ etiquetaEstado(estadoGeneral(check)) }}</strong></td>
             <td class="nota">{{ notaPrint(check) }}</td>
+            <td class="nota">{{ check.observations }}</td>
           </tr>
           <tr v-if="!checks.length">
-            <td colspan="9">{{ loading ? 'Cargando…' : 'Sin chequeos para esta fecha.' }}</td>
+            <td colspan="10">{{ loading ? 'Cargando…' : 'Sin chequeos para esta fecha.' }}</td>
           </tr>
         </tbody>
       </table>
